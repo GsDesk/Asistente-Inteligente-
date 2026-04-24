@@ -101,15 +101,42 @@ def me(request):
 
 # ─── Evaluaciones ─────────────────────────────────────────────────────────────
 @api_view(['POST'])
+@parser_classes([MultiPartParser, FormParser, JSONParser])
 @permission_classes([IsAuthenticated])
 def generate_evaluation_view(request):
-    topic = request.data.get('topic', '').strip()
-    if not topic:
-        return Response({"error": "No topic provided"}, status=400)
-    
-    result = aria_service.generate_evaluation(topic=topic, user=request.user)
-    
-    if "error" in result:
-        return Response(result, status=500)
+    try:
+        topic = request.data.get('topic', '').strip()
+        uploaded_file = request.FILES.get('file')
+
+        # Extraer contenido del documento si se subió
+        document_content = ""
+        if uploaded_file:
+            print(f"[AMY Evaluación] Archivo recibido: {uploaded_file.name} ({uploaded_file.size} bytes)")
+            document_content = extract_text_from_file(uploaded_file)
+            print(f"[AMY Evaluación] Texto extraído: {len(document_content)} caracteres")
+
+        # Se necesita al menos un tema o un documento
+        if not topic and not document_content:
+            return Response({"error": "Debes proporcionar un tema o un documento."}, status=400)
+
+        # Si solo hay documento sin tema, usar nombre del archivo como referencia
+        if not topic and document_content:
+            topic = f"Contenido del documento: {uploaded_file.name}"
+
+        result = aria_service.generate_evaluation(
+            topic=topic,
+            user=request.user,
+            document_content=document_content
+        )
         
-    return Response(result)
+        if "error" in result:
+            return Response(result, status=500)
+            
+        return Response(result)
+    
+    except Exception as e:
+        print(f"[AMY Evaluación] Error inesperado: {e}")
+        import traceback
+        traceback.print_exc()
+        return Response({"error": f"Error interno: {str(e)}"}, status=500)
+
