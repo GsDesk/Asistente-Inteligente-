@@ -203,9 +203,8 @@ const EvaluationPanel = ({ addToast }) => {
 
       <div className="eval-content">
         
-        {/* ESTADO 1: Setup */}
-        {step === 'setup' && (
-          <div className="eval-setup">
+        {/* COLUMNA IZQUIERDA: Setup (Siempre visible) */}
+        <div className="eval-setup" style={{ opacity: step !== 'setup' ? 0.6 : 1, pointerEvents: step !== 'setup' ? 'none' : 'auto' }}>
             <h3>¿Cómo quieres evaluarte hoy?</h3>
             
             {/* Selector de modo */}
@@ -316,15 +315,28 @@ const EvaluationPanel = ({ addToast }) => {
                 className="eval-btn-generate"
                 disabled={!canGenerate}
               >
-                {evalMode === 'document' ? 'Evaluar sobre documento' : 'Generar Test (3 Preguntas)'}
+                {evalMode === 'document' ? 'Evaluar sobre documento' : 'Generar Test (5 Preguntas)'}
               </button>
             </form>
           </div>
-        )}
 
-        {/* ESTADO 2: Cargando */}
-        {step === 'loading' && (
-          <div className="eval-loading">
+        {/* COLUMNA DERECHA: Área Principal Dinámica */}
+        <div className={`eval-main-area ${step === 'setup' || step === 'loading' ? 'centered' : ''}`}>
+          
+          {/* ESTADO 1: Bienvenida (cuando está en setup) */}
+          {step === 'setup' && (
+            <div className="eval-welcome">
+              <div className="eval-welcome-icon">
+                <IconBook />
+              </div>
+              <h3>Listo para empezar</h3>
+              <p>Configura tu evaluación en el panel izquierdo y AMY generará un test interactivo personalizado para ti.</p>
+            </div>
+          )}
+
+          {/* ESTADO 2: Cargando */}
+          {step === 'loading' && (
+            <div className="eval-loading">
             <div className="eval-spinner"></div>
             <h3>AMY está preparando tu examen...</h3>
             <p>
@@ -340,12 +352,20 @@ const EvaluationPanel = ({ addToast }) => {
         {step === 'quiz' && quizData && (
           <div className="eval-quiz-container">
             <div className="eval-quiz-header">
-              <span className="eval-progress-text">
-                Pregunta {currentQuestionIdx + 1} de {quizData.preguntas.length}
-              </span>
-              {quizData.tema && (
-                <span className="eval-quiz-topic">Tema: {quizData.tema}</span>
-              )}
+              <div className="eval-quiz-header-top">
+                <span className="eval-progress-text">
+                  Pregunta {currentQuestionIdx + 1} de {quizData.preguntas.length}
+                </span>
+                {quizData.tema && (
+                  <span className="eval-quiz-topic">Tema: {quizData.tema}</span>
+                )}
+              </div>
+              <div className="eval-progress-bar">
+                <div 
+                  className="eval-progress-fill" 
+                  style={{ width: `${((currentQuestionIdx + 1) / quizData.preguntas.length) * 100}%` }}
+                ></div>
+              </div>
             </div>
             
             <div className="eval-question-card">
@@ -422,6 +442,8 @@ const EvaluationPanel = ({ addToast }) => {
             </div>
           </div>
         )}
+        
+        </div> {/* Fin eval-main-area */}
       </div>
     </div>
   );

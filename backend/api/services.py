@@ -11,7 +11,7 @@ class AriaTutorService:
     def __init__(self):
         self.ollama_url = "http://host.docker.internal:11434/api/chat"
         self.model_name = "llama3.2:3b"  # RTX 2080 6GB — llama3.1:8b requiere ~4.4GB VRAM (OOM)
-        self.prompts = self._load_prompts()
+        self.model_name = "llama3.2:3b"  # RTX 2080 6GB — llama3.1:8b requiere ~4.4GB VRAM (OOM)
 
     def _load_prompts(self):
         try:
@@ -23,7 +23,8 @@ class AriaTutorService:
             return {}
 
     def get_formatted_prompt(self, prompt_key, **kwargs):
-        prompt = self.prompts.get(prompt_key, "")
+        prompts = self._load_prompts()
+        prompt = prompts.get(prompt_key, "")
         for key, value in kwargs.items():
             prompt = prompt.replace(f"{{{key}}}", str(value))
         return prompt
@@ -225,8 +226,9 @@ class AriaTutorService:
             topic=topic
         )
 
-        # Construir el mensaje del usuario
-        user_content = f"Por favor genera el examen sobre: {topic}"
+        import random
+        # Construir el mensaje del usuario con una semilla aleatoria para forzar variedad
+        user_content = f"Por favor genera un examen NUEVO y DIFERENTE sobre: {topic}. Variación: {random.randint(1000, 9999)}"
         
         # Si hay contenido de documento, truncar a un tamaño manejable para el modelo
         if document_content:
@@ -239,7 +241,7 @@ class AriaTutorService:
                 f"\n\n--- CONTENIDO DEL DOCUMENTO ---\n"
                 f"{doc_truncated}\n"
                 f"--- FIN DEL DOCUMENTO ---\n\n"
-                f"IMPORTANTE: Genera 3 preguntas basadas en el documento. "
+                f"IMPORTANTE: Genera 5 preguntas basadas en el documento. "
                 f"Cada opción debe ser CORTA (máximo 15 palabras por opción). "
                 f"NO copies párrafos completos como opciones. "
                 f"Responde ÚNICAMENTE con el JSON."
@@ -252,9 +254,10 @@ class AriaTutorService:
                 {"role": "user",   "content": user_content}
             ],
             "stream": False,
+            "format": "json",
             "options": {
-                "temperature": 0.3,
-                "num_predict": 2048  # Suficiente para 3 preguntas completas en JSON
+                "temperature": 0.7,
+                "num_predict": 3072  # Suficiente para 5 preguntas completas en JSON
             }
         }
 
