@@ -1,0 +1,321 @@
+/* ================================
+   EVALUATION PANEL
+   ================================ */
+
+.eval-panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: var(--bg-base);
+  overflow: hidden;
+}
+
+.eval-header {
+  padding: 24px 32px;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.eval-icon {
+  width: 44px;
+  height: 44px;
+  background: var(--accent-light);
+  color: var(--accent);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.eval-header-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.eval-header-sub {
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  margin-top: 2px;
+}
+
+.eval-content {
+  flex: 1;
+  padding: 32px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ── ESTADO 1: Formulario de inicio ── */
+.eval-setup {
+  max-width: 500px;
+  width: 100%;
+  background: var(--bg-card);
+  padding: 32px;
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+  margin-top: 20px;
+}
+
+.eval-setup h3 {
+  font-size: 1.1rem;
+  margin-bottom: 16px;
+  color: var(--text-primary);
+}
+
+.eval-input {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: var(--radius-md);
+  border: 1.5px solid var(--border);
+  background: var(--bg-input);
+  font-family: inherit;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.eval-input:focus {
+  border-color: var(--accent);
+  background: var(--bg-card);
+}
+
+.eval-btn-generate {
+  background: var(--accent);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 12px 24px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  box-shadow: 0 4px 12px rgba(124, 58, 237, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.eval-btn-generate:hover:not(:disabled) {
+  background: var(--accent-dark);
+  transform: translateY(-2px);
+}
+
+.eval-btn-generate:disabled {
+  background: var(--text-muted);
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+/* ── ESTADO 2: Cargando ── */
+.eval-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 16px;
+  color: var(--text-secondary);
+}
+
+.eval-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--accent-light);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── ESTADO 3: Quiz activo ── */
+.eval-quiz-container {
+  max-width: 650px;
+  width: 100%;
+}
+
+.eval-quiz-header {
+  margin-bottom: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.eval-progress-text {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.eval-question-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  padding: 32px;
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 24px;
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.eval-question-text {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: 24px;
+  line-height: 1.4;
+}
+
+.eval-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.eval-option-label {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  background: var(--bg-input);
+  transition: all 0.2s;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.eval-option-label:hover {
+  border-color: var(--accent);
+  background: var(--accent-light);
+}
+
+.eval-option-label input {
+  margin-right: 12px;
+  width: 18px;
+  height: 18px;
+  accent-color: var(--accent);
+}
+
+.eval-option-label.selected {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  color: var(--accent-dark);
+}
+
+.eval-modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 32px;
+}
+
+/* ── ESTADO 4: Resultados ── */
+.eval-results {
+  max-width: 650px;
+  width: 100%;
+}
+
+.eval-score-card {
+  background: var(--bg-card);
+  padding: 40px;
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.eval-score-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin-bottom: 16px;
+}
+
+.eval-score-circle {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: var(--accent-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  color: var(--accent-dark);
+  font-size: 2.5rem;
+  font-weight: 800;
+  border: 6px solid var(--accent);
+}
+
+.eval-feedback-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.eval-feedback-item {
+  background: var(--bg-card);
+  border-radius: var(--radius-md);
+  padding: 20px;
+  border-left: 4px solid var(--border);
+}
+
+.eval-feedback-item.correct {
+  border-left-color: var(--success);
+  background: var(--success-bg);
+}
+
+.eval-feedback-item.incorrect {
+  border-left-color: var(--error);
+  background: var(--error-bg);
+}
+
+.eval-fb-question {
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: var(--text-primary);
+}
+
+.eval-fb-answer {
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.eval-fb-correct-ans {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--success);
+  margin-bottom: 8px;
+}
+
+.eval-fb-explanation {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  background: rgba(255,255,255,0.5);
+  padding: 10px;
+  border-radius: 6px;
+  margin-top: 8px;
+}
