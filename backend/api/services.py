@@ -10,8 +10,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 class AriaTutorService:
     def __init__(self):
         self.ollama_url = "http://host.docker.internal:11434/api/chat"
-        self.model_name = "llama3.2:3b"  # RTX 2080 6GB — llama3.1:8b requiere ~4.4GB VRAM (OOM)
-        self.model_name = "llama3.2:3b"  # RTX 2080 6GB — llama3.1:8b requiere ~4.4GB VRAM (OOM)
+        self.model_name = "mistral"  # Modelo actualizado a petición del usuario
 
     def _load_prompts(self):
         try:

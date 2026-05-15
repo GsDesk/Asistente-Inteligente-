@@ -27,3 +27,20 @@ class Task(models.Model):
 
     def __str__(self):
         return f"{self.title} ({self.date} {self.time})"
+
+class EvaluationLog(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.SET_NULL,
+        related_name='evaluations',
+        null=True,
+        blank=True
+    )
+    topic = models.CharField(max_length=255)
+    is_document = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        type_str = "Doc" if self.is_document else "Tema"
+        username = self.user.username if self.user else "Anónimo"
+        return f"[{type_str}] {self.topic[:30]} - {username}"

@@ -12,6 +12,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -88,4 +89,35 @@ SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('Bearer',),
     'USER_ID_FIELD': 'id',
     'USER_ID_CLAIM': 'user_id',
+}
+
+# ─── Configuración del Dashboard (Jazzmin) ────────────────────────────────────
+JAZZMIN_SETTINGS = {
+    "site_title": "AMY Admin",
+    "site_header": "AMY AI Tutor",
+    "site_brand": "AMY Dashboard",
+    "site_icon": "fas fa-brain",
+    "welcome_sign": "Bienvenido al Panel de Control de AMY",
+    "copyright": "Golden Gazelle",
+    "search_model": ["auth.User", "api.Task", "api.EvaluationLog"],
+    "topmenu_links": [
+        {"name": "Inicio",  "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"model": "auth.User"},
+    ],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "api.Task": "fas fa-tasks",
+        "api.EvaluationLog": "fas fa-vial",
+    },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "pulse",
+    "dark_mode_theme": "darkly",
 }

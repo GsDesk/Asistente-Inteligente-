@@ -6,7 +6,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from .services import AriaTutorService
-from .models import Task
+from .models import Task, EvaluationLog
 from .serializers import TaskSerializer, RegisterSerializer, UserSerializer
 import io
 
@@ -132,6 +132,16 @@ def generate_evaluation_view(request):
         if "error" in result:
             return Response(result, status=500)
             
+        # Registrar en el dashboard
+        try:
+            EvaluationLog.objects.create(
+                user=request.user,
+                topic=topic,
+                is_document=bool(document_content)
+            )
+        except Exception as log_error:
+            print(f"[AMY Evaluación] Error al guardar log: {log_error}")
+
         return Response(result)
     
     except Exception as e:
